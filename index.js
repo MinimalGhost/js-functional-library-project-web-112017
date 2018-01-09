@@ -11,23 +11,87 @@ fi = (function() {
       return collection;
     },
 
-    map: function(collection, iteratee) {
-      let newArr = []
-      for (let element in Object.values(collection)) {
-        newArr.push(iteratee(collection[element], element, collection));
+    map: function (collection, iteratee) {
+      let newArr = [];
+      if (Array.isArray(collection)) {
+        for (var i = 0; i < collection.length; i++) {
+          newArr.push(iteratee(collection[i], i, collection))
+        }
+        return newArr;
+      } else {
+        let newArr = [];
+        for (var element in collection) {
+          newArr.push(iteratee(collection[element], element, collection))
+        }
+        return newArr;
       }
-      return newArr;
+
     },
 
     reduce: function(collection, iteratee, acc) {
-      for (let i = 0; i < collection.length; i++) {
-        acc += iteratee(acc, collection[i], collection)
+      for (var i = 0; i < collection.length; i++) {
+        acc = iteratee(acc, collection[i], collection);
       }
-      console.log(acc);
       return acc;
-
     },
-
+    find: function(collection, predicate) {
+      if (!(collection instanceof Array)) {
+        collection = Object.values(collection);
+      }
+      for (let i = 0; i < collection.length; i++) {
+        if (predicate(collection[i])) {
+          return true;
+        }
+      }
+      return false;
+    },
+    filter: function(collection, predicate) {
+      let newArr = [];
+      if (!(collection instanceof Array)) {
+        collection = Object.values(collection);
+      }
+      for (var i = 0; i < collection.length; i++) {
+        if (predicate(collection[i])) {
+          newArr.push(collection[i])
+        }
+      }
+      return newArr;
+    },
+    size: function(collection) {
+      if (!(collection instanceof Array)) {
+        collection = Object.values(collection);
+      }
+      let size = collection.length;
+      return size;
+    },
+    first: function(collection, n = 1) {
+      if (!(collection instanceof Array)) {
+        collection = Object.values(collection);
+      }
+      let newArr = [];
+      if (n === 1) {
+        return collection[0];
+      } else {
+        for (let i = 0; i < n; i++) {
+          newArr.push(collection[i])
+        }
+        return newArr;
+      }
+    },
+    last: function(collection, n = collection.length - 1) {
+      if (!(collection instanceof Array)) {
+        collection = Object.values(collection);
+      }
+      let newArr = [];
+      if (n === collection.length - 1) {
+        return collection[collection.length - 1];
+      } else {
+        for (let i = collection.length - 1; i > n; i--) {
+          newArr.push(collection[i])
+        }
+        return newArr;
+      }
+    },
     functions: function() {
 
     },
